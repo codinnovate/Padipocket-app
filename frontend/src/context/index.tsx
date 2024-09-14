@@ -24,7 +24,7 @@ export const AppWrapper = ({children} : {children:React.ReactNode}) => {
     )
 }
 
-
+// for using it 
 export function useUserContext () {
     return useContext(UserContext)
 }

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 
-const FormInput = ({label, name, onChange, value}) => {
+const FormInput = ({label, name, onChange, value, type = 'text'}) => {
    const [show, setShow] = useState(false);
 
   return (
@@ -11,7 +11,7 @@ const FormInput = ({label, name, onChange, value}) => {
         <input
         
         placeholder={`Enter your ${label}`}
-        type={name === 'password' && !show ? 'password' :'text'}
+        type={name === 'password' && !show ? 'password' : type}
         onChange={onChange}
         value={value}
         className='bg-gray-100  rounded-[.3em]  outline-none border border-gray-100 p-3 w-full' />

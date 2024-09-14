@@ -1,12 +1,15 @@
 'use client';
 
 
+import { lookInSession } from '@/app/lib/session';
 import DashboardHeader from '@/components/DashboardHeader'
 import Button from '@/components/ui/button'
 import WalletCard from '@/components/ui/WalletCard';
-import React from 'react'
 
 const Dashboard = () => {
+  const user = lookInSession('user')
+  console.log(user)
+
 //   const handlePurchase = async () => {
 //     try {
 //         const response = await axios.post(`${serverApp}/transactions/pay`,
@@ -44,7 +47,7 @@ const Dashboard = () => {
 //   }
   return (
     <div className='w-full flex flex-col gap-[1em]'>
-        <DashboardHeader />
+        <DashboardHeader  firstName={userData?.firstName} />
         <div className='w-full flex items-center justify-between'>
           <button>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

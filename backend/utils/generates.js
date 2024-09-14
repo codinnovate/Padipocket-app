@@ -29,7 +29,7 @@ const generateUploadURL = async () => {
 const generateUsername = async(email) => {
     let username = email.split("@")[0];
     let usernameExists = await User.exists({
-        "personal_info.username": username
+        "username": username
     })
     .then((result) => result)
     usernameExists ? username += nanoid().substring(0, 5) : "";
@@ -46,12 +46,12 @@ const formatDatatoSend = (user) => {
     )
     return {
         access_token,
-        profile_img: user.personal_info.profile_img,
-        username: user.personal_info.username,
-        firstName: user.personal_info.firstName,
-        lastName: user.personal_info.lastName,
+        profile_img: user.profile_img,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
         role:user.role,
-        email:user.personal_info.email,
+        email:user.email,
         userId:user._id
         }
     }

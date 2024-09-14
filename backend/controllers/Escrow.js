@@ -1,10 +1,12 @@
-const Escrow = require('../models/Escrow');
-const User = require('../models/User');
+import Escrow from '../schema/Escrow.js';
+import User from '../schema/User.js';
+
+import nodemailer from 'nodemailer';
 
 // Create an Escrow
 export const createEscrow = async (req, res) => {
   try {
-    const { secondParty, role, description, needsDispatch, amount, timeCompletion, timeUnit } = req.body;
+    const { secondParty, role, description, needsDispatch, amount} = req.body;
 
     const newEscrow = new Escrow({
       creator: req.user._id,
@@ -13,15 +15,65 @@ export const createEscrow = async (req, res) => {
       description,
       needsDispatch,
       amount,
-      timeCompletion,
-      timeUnit
     });
 
     await newEscrow.save();
+    res.status(201).json({ newEscrow });
+    const escrow_id = newEscrow._id;
     
     // Send invite link to secondParty's email (code to send email here)
-    
-    res.status(201).json({ escrow: newEscrow });
+     // Send email
+       const transporter = nodemailer.createTransport({
+         host:'smtp.gmail.com',
+         port:465,
+         secure:true,
+         service:'gmail',
+         auth: {
+           user:"passpadi.com@gmail.com", // Replace with your email
+           pass:"xbcxgpugziggvcza", // Replace with your email password
+         },
+       });
+       console.log('Got here 5')
+
+       const mailOptions = {
+         from: 'Padipocket App',
+         to: secondParty,
+        subject: `INVITE LINK TO Join A Transaction on Padipocket `,
+         html:`<!doctype html>
+                  <html>
+                  <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  </head>
+                  <body>
+
+
+                  <main> 
+                  <h2 class="mt-6 text-gray-700 dark:text-gray-200">Hi,</h2>
+
+                  <p class="mt-2 leading-loose text-gray-600 dark:text-gray-300">
+                      <h1>You have a been invited to join ${creator.personal_info.firstName} ${creator.personal_info.lastName} on PadiPocket to accept a secure transaction agreement</h1>
+                      <h2>Here is the link https://padipocket.vercel.app/escrow/processing/${escrow_id} </h2>
+                        
+                  </p>
+       <p class="mt-2 text-gray-600 dark:text-gray-300">
+           Thanks, <br>
+           PadiPocket Team
+       </p>
+            </main>
+          </section>
+          </body>
+          </html>`,
+       };
+ 
+       transporter.sendMail(mailOptions, (error, info) => {
+         if (error) {
+           console.log('Error sending email: ', error);
+         } else {
+           console.log('Email sent: ' + info.response);
+         }
+        })
+
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }

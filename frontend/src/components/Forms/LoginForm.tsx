@@ -7,6 +7,7 @@ import axios from 'axios'
 import { server } from '../../../server'
 import { storeInSession } from '@/app/lib/session'
 import { useRouter } from 'next/navigation'
+import toast, { Toaster } from 'react-hot-toast'
 
 const LoginForm = () => {
   const [password, setPassword] = useState('')
@@ -18,18 +19,19 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`${server}/signin`, {email, password}); // Corrected API endpoint
-      console.log(response.data);
       const data = response.data;
       storeInSession("user", JSON.stringify(data))    
       router.push('/dashboard')
     } catch (error) {
-      alert(error?.response?.data?.error)
+      toast.error(error?.response?.data?.error)
       console.error(error)
     }
   }
 
   return (
+
    <form className='flex flex-col gap-5'>
+    <Toaster />
     <FormInput 
     value={email}
     name='email' 

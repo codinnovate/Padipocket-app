@@ -32,30 +32,27 @@ const Register = async (req, res) => {
     }
     bcrypt.hash(password, 10, async(err, hash_password) => {
         let username = await generateUsername(email);
-        let user = new User({
-            personal_info: {
-                firstName,lastName, email, password:hash_password , username,  }
-        })
+        let user = new User({firstName, lastName, email, password:hash_password , username,  })
         user.save().then((u) => {
             return res.status(200).json(formatDatatoSend(u))
         })
         .catch(err => {
-                if (err.code == 11000) {
-                return res.status(500).json({"error":"Email or Phone Number  already exists"})
-                console.log({"error":"Email already exists"})
-            }
+            //     if (err.code == 11000) {
+            //     return res.status(500).json({"error":"Email already exists"})
+            // }
+            console.error(err)
             return res.status(500).json({"error":err.message})
         })})
 }
 const Login = (req, res) => {
     let { email, password,  } = req.body;
-    User.findOne({ "personal_info.email": email })
+    User.findOne({ "email": email })
         .then((user) => {
             if (!user){
                     return res.status(403).json({"error":"Email not found"})
             }
             if (!user.google_auth) {
-                bcrypt.compare(password, user.personal_info.password,
+                bcrypt.compare(password, user.password,
                     async (err, result) => {
                         if (err) {
                             return res.status(403).json({"error":"Error occured while login please try again!"})
@@ -76,51 +73,13 @@ const Login = (req, res) => {
         return res.status(500).json({"error":err.message})
     })
 }
-const GoogleAuth = async (req, res) => {
-    let { access_token } = req.body;
-    getAuth().verifyIdToken(access_token)
-        .then(async (decodeUser) => {
-            let { email, name, picture } = decodeUser;
-            picture = picture.replace("s96-c", "s384-c");
-            let user = await User.findOne({ "personal_info.email": email }).select("personal_info.fullname personal_info.username personal_info.profile_img google_auth").then((u) => {
-                return u || null
-            })
-                .catch(err => {
-                    return res.status(500).json({ "error": err.message })
-                })
-            if (user) {
-                if (!user.google_auth) {
-                    return res.status(403).json({ "error": "This email was signed up without google. Please log in with your credentials to access the account" })
-                }
-                
-            } else {
-                let username = await generateUsername(email);
-                user = new User({
-                    personal_info: { fullname: name, email, profile_img: picture, username },
-                    google_auth:true
-                })
-                await user.save().then((u) => {
-                    user = u;
-                })
-                    .catch(err => {
-                        return res.status(500).json({ "error": err.message })
-                })
-            }
-           return res.status(200).json(formatDatatoSend(user))
-        })
-        .catch(err => {
-            return res.status(500).json({"error":"Authentication Fialed try wih another google account."})
-        })
+
       
-
-    
-}
-
 const getMyProfile = async (req, res) => {
     try {
       const userId = req.user;
       const user = await User.findById(userId)
-      .select("personal_info.fullname personal_info.username personal_info.profile_img  personal_info.points -_id")
+      .select("lastName firstName username profile_img  points -_id")
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
@@ -197,15 +156,15 @@ const activateUser = async (req, res) => {
 
 // const getAllContacts = async (req, res) => {
 //     try {
-//         // Fetch only the fullname and phone number of users excluding roles "admin" and "superadmin"
+//         // Fetch only the lastName firstName and phone number of users excluding roles "admin" and "superadmin"
 //         const users = await User.find({
 //             role: "user"
 //         }
 //         )
-//         .select("personal_info.phoneNumber personal_info.fullname -_id"); // Exclude the _id field from the result
+//         .select("phoneNumber lastName firstName -_id"); // Exclude the _id field from the result
 
-//         // Extract fullname and phone numbers into an array of formatted strings
-//         const contacts = users.map(user => `${user.personal_info.phoneNumber}`);
+//         // Extract lastName firstName and phone numbers into an array of formatted strings
+//         const contacts = users.map(user => `${user.phoneNumber}`);
 
 //         // Join the contacts with a newline character
 //         // const contactsString = contacts.join(',\n');
@@ -225,8 +184,8 @@ const activateUser = async (req, res) => {
 
 const getProfile = async (req, res) =>{
     let { username } = req.body;
-      User.findOne({ "personal_info.username": username })
-      .select("-personal_info.password -google_auth -updatedAt -blogs")
+      User.findOne({ "username": username })
+      .select("-password -google_auth -updatedAt -blogs")
           .then(user => {
           return res.status(200).json(user)
           console.log(user)
@@ -240,9 +199,9 @@ const getProfile = async (req, res) =>{
 export const searchUsers = async (req, res) =>{
     let { query } = req.body;
 
-    User.find({ "personal_info.username": new RegExp(query, 'i') })
+    User.find({ "username": new RegExp(query, 'i') })
     .limit(50)
-    .select("personal_info.fullname personal_info.username profile_info.profile_img -_id")
+    .select("lastName firstName username profile_img -_id")
     .then(users => {
             return res.status(200).json({ users })
         })
@@ -252,5 +211,5 @@ export const searchUsers = async (req, res) =>{
   
 }
 export {
-    Register,Login, GoogleAuth, getMyProfile,deleteUser,activateUser, getProfile
+    Register,Login, getMyProfile,deleteUser,activateUser, getProfile
 }

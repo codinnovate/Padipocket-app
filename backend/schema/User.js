@@ -4,7 +4,6 @@ let profile_imgs_name_list = ["Garfield", "Tinkerbell", "Annie", "Loki", "Cleo",
 let profile_imgs_collections_list = ["notionists-neutral", "adventurer-neutral", "fun-emoji"];
 
 const userSchema = mongoose.Schema({
-    personal_info: {
         firstName: {
             type: String,
             lowercase: true,
@@ -35,9 +34,13 @@ const userSchema = mongoose.Schema({
                 return `https://api.dicebear.com/6.x/${profile_imgs_collections_list[Math.floor(Math.random() * profile_imgs_collections_list.length)]}/png?seed=${profile_imgs_name_list[Math.floor(Math.random() * profile_imgs_name_list.length)]}`
             } 
         },
-    },
       wallet:{
-        
+        type: Number,
+        default: 0,
+      },
+      escrow_wallet:{
+        type: Number,
+        default: 0,
       },
       verified: {
         type: Boolean,
