@@ -30,7 +30,7 @@ const CreateTransaction = () => {
      />
 
      <Button
-      className='w-full rounded-md hover:bg-[#3bb85d] font-semibold'
+      className='w-full rounded-md hover:bg-green font-semibold'
       title='Start Transaction' />
 </div>
   )

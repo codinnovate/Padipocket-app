@@ -11,8 +11,11 @@ const config: Config = {
       colors:{
         'primary': '#023047',
         'gray-500':'#ebf8ff',
+        'gray-100':'#edf2f6',
         'primary-100':'#062963',
-        'gray':'#667085'
+        'primary-200':'#083e9d',
+        'gray':'#667085',
+        'green':'#3bb85d'
       },
     },
   },

@@ -3,7 +3,7 @@ import playstore from '@/assets/playstore.png';
 import appstore from '@/assets/appstore.png';
 import Image from 'next/image';
 import woman from '@/assets/woman.png';
-import Button from './ui/button';
+import Link from 'next/link';
 
 
 const Hero = () => {
@@ -30,8 +30,9 @@ const Hero = () => {
 
             </div> */}
             <div className='flex gap-2 items-center'>
-              <Button
-               title={
+                <Link
+                className='rounded-[.7em] w-[12em] items-center justify-center flex font-semibold uppercase  transition-all duration-75   h-[48px] bg-primary'
+                href='/auth/register'>
                 <div className='flex items-center gap-3'>
                 Get started
                  <span>
@@ -41,7 +42,7 @@ const Hero = () => {
                 </svg>
                 </span>
                 </div>
-              } />
+                </Link>
               <h2 className='items-center flex font-semibold'>
                  Secure Your Next Purchase
                 </h2>

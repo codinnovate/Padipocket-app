@@ -12,6 +12,7 @@ export default function Home() {
      <Header />
     <div className="max-w-6xl mx-auto px-3 md:px-0 flex flex-col gap-10">
      <Hero/>
+     <Demo />
      <HowitWorks />
      <Features />
      {/* <Ecommerce /> */}

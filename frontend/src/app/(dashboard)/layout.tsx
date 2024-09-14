@@ -1,4 +1,8 @@
+'use client';
+
+
 import Logo from '@/components/Logo'
+import { AppWrapper } from '@/context'
 import Link from 'next/link'
 import React from 'react'
 
@@ -37,20 +41,15 @@ const navItems = [
     </svg>
     },
 ]
-const dashboardLayout = ({children}) => {
+const dashboardLayout = ({children}:{children:React.ReactNode}) => {
   return (
     <div className='flex relative h-screen '>
       <aside 
       className="transition-all md:min-h-screen md:h-full absolute lg:relative bottom-0 z-20 md:px-6 md:pt-12 md:pb-4 flex md:flex-col w-screen md:w-64  bg-white md:bg-primary-100 text-white md:overflow-x-hidden"
       >
         <div className="hidden md:flex items-center mb-12 w-48">
-        <button className='mr-8'>
-        <svg className="text-white cursor-pointer"  width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 20H29M11 14H29M11 26H29" stroke="#a1aebf" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        </button>
         <Logo 
-         color='white'/>
+         color='light'/>
         </div>
         <ul className="flex md:flex-col flex-1 justify-between md:justify-start py-2 md:py-0 shadow-dark md:shadow-none">
           {navItems.map((item, idx) => (
@@ -84,7 +83,9 @@ const dashboardLayout = ({children}) => {
 
       <main className="max-w-4xl mx-auto  w-full flex flex-col flex-1 p-3  overflow-auto md:ml-64 lg:ml-12  md:z-10 mb-16 md:mb-0 pt-6 md:pl-4 md:mt-[2em]">
       <h1 className='text-red-500 font-semibold text-[12px] ring-1 bg-red-50 ring-red-600 px-1 py-1.5 rounded-xl ml-auto'>Test Mode, No real amount is charged for transactions</h1>
+      <AppWrapper>
       {children}
+      </AppWrapper>
       </main>
     </div>
   )
