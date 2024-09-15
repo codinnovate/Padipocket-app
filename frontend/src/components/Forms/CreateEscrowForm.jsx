@@ -6,7 +6,7 @@ import Button from '../ui/button'
 import axios from 'axios'
 import { server } from '../../../server'
 import { useRouter } from 'next/navigation'
-import { UserContext } from '@/app/(dashboard)/layout'
+import { UserContext } from '@/context';
 import toast, { Toaster } from 'react-hot-toast'
 
 const CreateEscrowForm = () => {

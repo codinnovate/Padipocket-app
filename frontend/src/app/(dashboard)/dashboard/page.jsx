@@ -3,7 +3,7 @@ import DashboardHeader from '@/components/DashboardHeader'
 import Button from '@/components/ui/button'
 import WalletCard from '@/components/ui/WalletCard';
 import { useContext } from 'react';
-import { UserContext } from '../layout';
+import { UserContext } from '@/context';
 import Loader from '@/components/Loader';
 
 const Dashboard = () => {

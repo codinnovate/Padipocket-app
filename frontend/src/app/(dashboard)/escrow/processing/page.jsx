@@ -1,7 +1,7 @@
 'use client';
 import Button from '@/components/ui/button';
 import React, { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../layout';
+import { UserContext } from '@/context';
 import axios from 'axios';
 import { server } from '../../../../../server';
 import { useRouter } from 'next/navigation';
