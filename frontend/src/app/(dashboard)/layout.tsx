@@ -41,9 +41,11 @@ const navItems = [
     </svg>
     },
 ]
+
+
 export const UserContext = createContext({});
 
-const DashboardLayout = ({children}) => {
+const DashboardLayout = ({children}:{children:React.ReactNode}) => {
   const [userAuth, setUserAuth] = useState({});
   useEffect(() => {
     let userInSession = lookInSession("user");
