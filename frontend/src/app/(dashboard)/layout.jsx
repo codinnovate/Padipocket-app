@@ -43,7 +43,7 @@ const navItems = [
 ]
 export const UserContext = createContext({});
 
-const dashboardLayout = ({children}:{children:React.ReactNode}) => {
+const dashboardLayout = ({children}) => {
   const [userAuth, setUserAuth] = useState({});
   useEffect(() => {
     let userInSession = lookInSession("user");
