@@ -1,5 +1,4 @@
 import React from 'react'
-import CreateTransaction from '@/components/Forms/CreateTransaction';
 
 
 const Transaction = () => {
@@ -7,8 +6,7 @@ const Transaction = () => {
     <div className=''>
         <h2 className='text-xl font-bold'>Create A Transaction</h2>
         <form>
-
-            
+       
         </form>
     </div>
   )

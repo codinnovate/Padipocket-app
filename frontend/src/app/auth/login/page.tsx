@@ -14,7 +14,7 @@ const Login = () => {
             <LoginForm />
         </div>
         <div className=''>
-            <Link href='/auth/register' className='text-sm text-center text-gray-400 hover:text-primary-200'>don't have an account? <span className='text-primary-200'>Register </span> </Link>
+            <Link href='/auth/register' className='text-sm text-center text-gray-400 hover:text-primary-200'>don&apos;t have an account? <span className='text-primary-200'>Register </span> </Link>
         </div>
     </div>
   )

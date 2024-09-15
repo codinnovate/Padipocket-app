@@ -10,7 +10,7 @@ import { UserContext } from '@/app/(dashboard)/layout'
 import toast, { Toaster } from 'react-hot-toast'
 
 const CreateEscrowForm = () => {
-  const { userAuth, userAuth: { access_token } } = useContext(UserContext);
+  const { userAuth: { access_token } } = useContext(UserContext);
 
   const [desc, setDesc] = useState('')
   const [price, setPrice] = useState('');

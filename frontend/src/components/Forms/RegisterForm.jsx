@@ -17,7 +17,7 @@ export function RegisterForm () {
   const router = useRouter();
 
 
-  async function handleRegister (e: React.FormEvent<HTMLFormElement>){
+  async function handleRegister (){
     e.preventDefault();
     try {
       const response = await axios.post(`${server}/signup`, {firstName, lastName, password, email}); // Corrected API endpoint
