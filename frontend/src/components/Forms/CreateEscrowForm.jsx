@@ -23,7 +23,7 @@ const CreateEscrowForm = () => {
     return fee.toFixed(2);
   }
 
-  async function handleEscrow(e: React.FormEvent<HTMLFormElement>) {
+  async function handleEscrow() {
     e.preventDefault();
     try {
       // Determine if the role is 'Buyer'
