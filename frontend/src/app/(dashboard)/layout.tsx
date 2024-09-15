@@ -2,9 +2,9 @@
 
 
 import Logo from '@/components/Logo'
-import { AppWrapper } from '@/context'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState, createContext } from 'react'
+import { lookInSession } from '../lib/session';
 
 
 
@@ -41,7 +41,14 @@ const navItems = [
     </svg>
     },
 ]
+export const UserContext = createContext({});
+
 const dashboardLayout = ({children}:{children:React.ReactNode}) => {
+  const [userAuth, setUserAuth] = useState({});
+  useEffect(() => {
+    let userInSession = lookInSession("user");
+    userInSession ?  setUserAuth(JSON.parse(userInSession)) : setUserAuth({access_token:null})
+},[])
   return (
     <div className='flex relative h-screen '>
       <aside 
@@ -83,9 +90,9 @@ const dashboardLayout = ({children}:{children:React.ReactNode}) => {
 
       <main className="max-w-4xl mx-auto  w-full flex flex-col flex-1 p-3  overflow-auto md:ml-64 lg:ml-12  md:z-10 mb-16 md:mb-0 pt-6 md:pl-4 md:mt-[2em]">
       <h1 className='text-red-500 font-semibold text-[12px] ring-1 bg-red-50 ring-red-600 px-1 py-1.5 rounded-xl ml-auto'>Test Mode, No real amount is charged for transactions</h1>
-      <AppWrapper >
+      <UserContext.Provider value={{ userAuth, setUserAuth }}>
       {children}
-      </AppWrapper>
+      </UserContext.Provider>
       </main>
     </div>
   )

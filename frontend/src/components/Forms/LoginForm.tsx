@@ -20,6 +20,7 @@ const LoginForm = () => {
     try {
       const response = await axios.post(`${server}/signin`, {email, password}); // Corrected API endpoint
       const data = response.data;
+      console.log(data)
       storeInSession("user", JSON.stringify(data))    
       router.push('/dashboard')
     } catch (error) {

@@ -3,81 +3,78 @@ import User from '../schema/User.js';
 
 import nodemailer from 'nodemailer';
 
-// Create an Escrow
+
 export const createEscrow = async (req, res) => {
   try {
-    const { secondParty, role, description, needsDispatch, amount} = req.body;
+    const { secondParty, role, description, needsDispatch, amount } = req.body;
+    const creator = req.user;
 
     const newEscrow = new Escrow({
-      creator: req.user._id,
+      creator,
       secondParty,
-      role,
       description,
       needsDispatch,
       amount,
+      role
     });
 
     await newEscrow.save();
     res.status(201).json({ newEscrow });
+    console.log(newEscrow);
     const escrow_id = newEscrow._id;
-    
-    // Send invite link to secondParty's email (code to send email here)
-     // Send email
-       const transporter = nodemailer.createTransport({
-         host:'smtp.gmail.com',
-         port:465,
-         secure:true,
-         service:'gmail',
-         auth: {
-           user:"passpadi.com@gmail.com", // Replace with your email
-           pass:"xbcxgpugziggvcza", // Replace with your email password
-         },
-       });
-       console.log('Got here 5')
 
-       const mailOptions = {
-         from: 'Padipocket App',
-         to: secondParty,
-        subject: `INVITE LINK TO Join A Transaction on Padipocket `,
-         html:`<!doctype html>
-                  <html>
-                  <head>
-                  <meta charset="UTF-8">
-                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  </head>
-                  <body>
+    // Send invite link to secondParty's email
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      service: 'gmail',
+      auth: {
+        user: 'passpadi.com@gmail.com', // Replace with your email
+        pass: 'xbcxgpugziggvcza', // Replace with your email password
+      },
+    });
 
+    const mailOptions = {
+      from: 'Padipocket App',
+      to: secondParty,
+      subject: `INVITE LINK TO Join A Transaction on Padipocket`,
+      html: `<!doctype html>
+              <html>
+              <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              </head>
+              <body>
+              <main>
+              <h2 class="mt-6 text-gray-700 dark:text-gray-200">Hi,</h2>
+              <p class="mt-2 leading-loose text-gray-600 dark:text-gray-300">
+                  <h1>You have been invited to join ${creator.firstName} ${creator.lastName} on PadiPocket to accept a secure transaction agreement</h1>
+                  <h2>Here is the link https://padipocket.vercel.app/escrow/processing/${escrow_id}</h2>
+              </p>
+              <p class="mt-2 text-gray-600 dark:text-gray-300">
+                  Thanks, <br>
+                  PadiPocket Team
+              </p>
+              </main>
+              </body>
+              </html>`,
+    };
 
-                  <main> 
-                  <h2 class="mt-6 text-gray-700 dark:text-gray-200">Hi,</h2>
-
-                  <p class="mt-2 leading-loose text-gray-600 dark:text-gray-300">
-                      <h1>You have a been invited to join ${creator.personal_info.firstName} ${creator.personal_info.lastName} on PadiPocket to accept a secure transaction agreement</h1>
-                      <h2>Here is the link https://padipocket.vercel.app/escrow/processing/${escrow_id} </h2>
-                        
-                  </p>
-       <p class="mt-2 text-gray-600 dark:text-gray-300">
-           Thanks, <br>
-           PadiPocket Team
-       </p>
-            </main>
-          </section>
-          </body>
-          </html>`,
-       };
- 
-       transporter.sendMail(mailOptions, (error, info) => {
-         if (error) {
-           console.log('Error sending email: ', error);
-         } else {
-           console.log('Email sent: ' + info.response);
-         }
-        })
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error sending email: ', error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
 
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    console.error(error);
+    return res.status(500).json({ message: 'Server error', error });
   }
 };
+
 
 // Accept Escrow Terms
 export const acceptEscrow = async (req, res) => {
@@ -125,3 +122,33 @@ export const completeEscrow = async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 };
+
+
+export const getEscrows = async (req, res) => {
+  try {
+    const { email } = req.body; // Get the second party email from the request body
+    const userId = req.user; // Get the logged-in user's ID
+
+    // Find all escrows where the user is either the creator or the second party
+    const escrows = await Escrow.find({
+      $or: [
+        { creator: userId }, // User is the creator
+        { secondParty: email } // The provided email is the second party
+      ]
+    })
+    .populate('creator');
+
+    // If no escrows are found, return a not found error
+    if (!escrows.length) {
+      return res.status(404).json({ message: 'No escrows found' });
+    }
+
+    // Return the list of escrows
+    res.status(200).json({escrows});
+  } catch (error) {
+    // Handle any server error
+    console.error(error)
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+

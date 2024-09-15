@@ -1,15 +1,11 @@
-const express = require('express');
-const { createEscrow, acceptEscrow, completeEscrow } = require('../controllers/escrowController');
-const router = express.Router();
-const auth = require('../middleware/auth'); // Authentication middleware
+import express, { Router } from "express";
+import { createEscrow, acceptEscrow, completeEscrow, getEscrows } from '../controllers/Escrow.js';
+import { verifyJWT } from "../middlewares/VerifyJwt.js";
 
+export const  escrowRouter = express.Router();
 // Create a new Escrow
-router.post('/escrow', auth, createEscrow);
+escrowRouter.post('/escrow', verifyJWT, createEscrow)
+            .post('/escrows/', verifyJWT, getEscrows)
+            .post('/escrow/:escrowId/accept', verifyJWT, acceptEscrow)
+            .post('/escrow/:escrowId/complete', verifyJWT, completeEscrow)
 
-// Accept Escrow (Second party confirms terms)
-router.post('/escrow/:escrowId/accept', auth, acceptEscrow);
-
-// Complete Escrow (After time or buyer confirms receipt)
-router.post('/escrow/:escrowId/complete', auth, completeEscrow);
-
-module.exports = router;

@@ -5,11 +5,10 @@ import User from './schema/User.js';
 import { nanoid } from 'nanoid';
 import cors from 'cors';
 import { verifyJWT } from './middlewares/VerifyJwt.js';
-import { generateSlug} from './utils/generates.js';
 import { uploadUrl } from './controllers/uploads.js';
 import { userRouter } from './routes/User.js';
 import { paymentRouter } from './routes/Payments.js'
-import nodemailer from 'nodemailer';
+import { escrowRouter } from './routes/Escrow.js';
 
 
 
@@ -19,7 +18,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("", [userRouter,])
+app.use("", [userRouter, escrowRouter]);
 app.use("/transactions", paymentRouter)
 app.get('/get-upload-url', uploadUrl);
 
