@@ -23,7 +23,7 @@ const CreateEscrowForm = () => {
     return fee.toFixed(2);
   }
 
-  async function handleEscrow() {
+  async function handleEscrow(e) {
     e.preventDefault();
     try {
       // Determine if the role is 'Buyer'
