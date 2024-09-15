@@ -18,7 +18,7 @@ const Demo = () => {
                 {countries.map((item, idx) => {
                     return (
                     <option key={idx}>
-                        <h1 className='text-primary font-bold'>{item.title}</h1>
+                        <span className='text-primary font-bold'>{item.title}</span>
                     </option>
                     )
                     

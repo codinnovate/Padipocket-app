@@ -40,7 +40,7 @@ const Header = () => {
          <Button 
          onClick={
            () => {
-             router.push('/dashboard')
+             router.push('/auth/login');
            }
          }
          className="hidden md:block "  title="Login" />

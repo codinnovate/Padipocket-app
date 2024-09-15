@@ -31,7 +31,7 @@ const Hero = () => {
                 <Link
                 className='rounded-[.7em] w-[12em] items-center justify-center flex font-semibold uppercase  transition-all duration-75   h-[48px] bg-primary'
                 href='/auth/register'>
-                <div className='flex items-center gap-3'>
+                <div className='flex items-center text-white gap-3'>
                 Get started
                  <span>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

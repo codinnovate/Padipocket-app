@@ -15,7 +15,7 @@ const LoginForm = () => {
   const router = useRouter()
 
 
-  async function handleLogin (){
+  async function handleLogin (e){
     e.preventDefault();
     try {
       const response = await axios.post(`${server}/signin`, {email, password}); // Corrected API endpoint

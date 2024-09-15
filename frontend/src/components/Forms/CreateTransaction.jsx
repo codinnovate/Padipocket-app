@@ -1,6 +1,7 @@
+
 import React from 'react'
 import Input from '../ui/Input'
-import Button from '../ui/button'
+import Link from 'next/link'
 
 const CreateTransaction = () => {
   return (
@@ -28,10 +29,12 @@ const CreateTransaction = () => {
     label='Price (₦)'
     type='Number'
      />
-
-     <Button
-      className='w-full rounded-md hover:bg-green font-semibold'
-      title='Start Transaction' />
+     <Link 
+     className={` hover:bg-green rounded-[.7em] w-full items-center justify-center flex font-semiboldreg uppercase text-white  transition-all duration-75  h-[48px] bg-primary`}
+     href='/auth/register'>
+      <h2>Start Transaction</h2>
+     </Link>
+   
 </div>
   )
 }
