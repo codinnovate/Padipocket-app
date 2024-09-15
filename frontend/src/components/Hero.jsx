@@ -1,6 +1,4 @@
 import React from 'react'
-import playstore from '@/assets/playstore.png';
-import appstore from '@/assets/appstore.png';
 import Image from 'next/image';
 import woman from '@/assets/woman.png';
 import Link from 'next/link';

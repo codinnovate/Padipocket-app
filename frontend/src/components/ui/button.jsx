@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import React from 'react'
 
 const Button = ({title,disabled, className,type, onClick, textColor}) => {

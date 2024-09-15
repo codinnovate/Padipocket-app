@@ -1,5 +1,4 @@
 import Demo from "@/components/Demo";
-import Ecommerce from "@/components/Ecommerce";
 import Features from "@/components/Features";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
@@ -15,8 +14,7 @@ export default function Home() {
      <Demo />
      <HowitWorks />
      <Features />
-     {/* <Ecommerce /> */}
-     {/* <Demo /> */}
+   
     </div>
      <Footer />
     </div >
