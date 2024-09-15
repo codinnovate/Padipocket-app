@@ -10,7 +10,7 @@ const escrowLinks = [
   {title:'On going', href:'/escrow/processing'},
   {title:'Completed', href:'/escrow/completed'},
 ]
-const EscrowLayout = ({children}) => {
+const EscrowLayout = ({children}:{children:React.ReactNode}) => {
   const pathname = usePathname();
   return (
     <div className='flex flex-col gap-[2em]'>
