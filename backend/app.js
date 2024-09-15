@@ -2,7 +2,6 @@ import express from 'express';
 import mongoose from 'mongoose';
 import 'dotenv/config'
 import User from './schema/User.js';
-import { nanoid } from 'nanoid';
 import cors from 'cors';
 import { verifyJWT } from './middlewares/VerifyJwt.js';
 import { uploadUrl } from './controllers/uploads.js';

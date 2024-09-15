@@ -79,7 +79,7 @@ const getMyProfile = async (req, res) => {
     try {
       const userId = req.user;
       const user = await User.findById(userId)
-      .select("lastName firstName username profile_img  points -_id")
+      .select("lastName firstName username wallet profile_img  -_id")
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }

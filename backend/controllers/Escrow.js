@@ -21,7 +21,10 @@ export const createEscrow = async (req, res) => {
     await newEscrow.save();
     res.status(201).json({ newEscrow });
     console.log(newEscrow);
-    const escrow_id = newEscrow._id;
+    const escrow_id = newEscrow._id
+    const desc = newEscrow.description;
+    const creatorFirstName = newEscrow.creator.firstName;
+    const creatorLastName = newEscrow.creator.lastName;
 
     // Send invite link to secondParty's email
     const transporter = nodemailer.createTransport({
@@ -30,8 +33,8 @@ export const createEscrow = async (req, res) => {
       secure: true,
       service: 'gmail',
       auth: {
-        user: 'passpadi.com@gmail.com', // Replace with your email
-        pass: 'xbcxgpugziggvcza', // Replace with your email password
+        user: 'padipocket@gmail.com', // Replace with your email
+        pass: 'lgbusgkvizwfkjre', // Replace with your email password
       },
     });
 
@@ -49,7 +52,8 @@ export const createEscrow = async (req, res) => {
               <main>
               <h2 class="mt-6 text-gray-700 dark:text-gray-200">Hi,</h2>
               <p class="mt-2 leading-loose text-gray-600 dark:text-gray-300">
-                  <h1>You have been invited to join ${creator.firstName} ${creator.lastName} on PadiPocket to accept a secure transaction agreement</h1>
+                  <h1>You have been invited to join ${creatorFirstName} ${creatorLastName} PadiPocket to accept a secure transaction agreement</h1>
+                  <p>Here is the description of the transaction agreement : ${desc}</p>
                   <h2>Here is the link https://padipocket.vercel.app/escrow/processing/${escrow_id}</h2>
               </p>
               <p class="mt-2 text-gray-600 dark:text-gray-300">
