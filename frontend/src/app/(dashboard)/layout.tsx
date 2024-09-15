@@ -48,7 +48,7 @@ export const UserContext = createContext({});
 const DashboardLayout = ({children}:{children:React.ReactNode}) => {
   const [userAuth, setUserAuth] = useState({});
   useEffect(() => {
-    let userInSession = lookInSession("user");
+    const  userInSession = lookInSession("user");
     userInSession ?  setUserAuth(JSON.parse(userInSession)) : setUserAuth({access_token:null})
 },[])
   return (

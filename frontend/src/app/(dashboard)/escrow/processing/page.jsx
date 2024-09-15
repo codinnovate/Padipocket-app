@@ -35,7 +35,7 @@ const EscrowProcessing = () => {
 
   useEffect(() => {
     getEscrows();
-  }, [access_token]);
+  }, [access_token, getEscrows]);
 
   if (!access_token) {
     return <Loader />;
