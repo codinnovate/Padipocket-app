@@ -10,7 +10,7 @@ import Loader from '@/components/Loader';
 const EscrowProcessing = () => {
   const router = useRouter();
   const [myEscrows, setMyEscrows] = useState([]);
-  const { userAuth, userAuth: { access_token, email } } = useContext(UserContext);
+  const { userAuth: { access_token, email } } = useContext(UserContext);
 
   const getEscrows = async () => {
     try {

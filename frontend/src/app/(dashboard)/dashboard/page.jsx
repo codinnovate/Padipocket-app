@@ -1,18 +1,13 @@
 'use client';
-
-
 import DashboardHeader from '@/components/DashboardHeader'
 import Button from '@/components/ui/button'
 import WalletCard from '@/components/ui/WalletCard';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { UserContext } from '../layout';
-import { useRouter } from 'next/navigation';
 import Loader from '@/components/Loader';
 
 const Dashboard = () => {
-  const router = useRouter()
-  const {userAuth, userAuth:{ firstName, access_token, profile_img, email}} = useContext(UserContext);
-  console.log(userAuth);
+  const { userAuth:{ firstName, access_token, profile_img, email}} = useContext(UserContext);
 //   const handlePurchase = async () => {
 //     try {
 //         const response = await axios.post(`${serverApp}/transactions/pay`,

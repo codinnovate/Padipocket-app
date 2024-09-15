@@ -16,7 +16,7 @@ const EscrowLayout = ({children}) => {
     <div className='flex flex-col gap-[2em]'>
       <div className=''>
         <h2 className='text-3xl  font-bold'>Escrow</h2>
-        <h3>Escrow helps when you're making transactions with a stranger</h3>
+        <h3>Escrow helps when you&apos;re making transactions with a stranger</h3>
      </div>
      <div className='border border-black/10 rounded-2xl w-full min-h-[400px]'>
       <header className='flex items-center justify-evenly w-full border-black/10 border-b px-4 pt-4'>
