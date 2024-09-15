@@ -1,7 +1,7 @@
 import Logo from '@/components/Logo'
 import React from 'react'
 
-const Authlayout = ({children}) => {
+const Authlayout = ({children}:{children:React.ReactNode}) => {
   return (
 <div className=' w-full p-2 h-screen bg-primary-100'>
 <div className='flex flex-col max-w-[28em] mx-auto justify-center items-center pt-[3em] gap-[2em]'>
