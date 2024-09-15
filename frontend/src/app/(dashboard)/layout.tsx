@@ -3,8 +3,9 @@
 
 import Logo from '@/components/Logo'
 import Link from 'next/link'
-import React, { useEffect, useState, createContext } from 'react'
+import React, { useEffect, useState,  } from 'react'
 import { lookInSession } from '../lib/session';
+import { UserContext } from '@/context';
 
 
 
@@ -43,7 +44,6 @@ const navItems = [
 ]
 
 
-export const UserContext = createContext({});
 
 const DashboardLayout = ({children}:{children:React.ReactNode}) => {
   const [userAuth, setUserAuth] = useState({});
