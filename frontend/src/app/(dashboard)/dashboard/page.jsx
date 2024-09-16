@@ -2,53 +2,121 @@
 import DashboardHeader from '@/components/DashboardHeader'
 import Button from '@/components/ui/button'
 import WalletCard from '@/components/ui/WalletCard';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '@/context';
 import Loader from '@/components/Loader';
+import FormInput from '@/components/ui/FormInput';
+import { server } from '../../../../server';
+import axios from 'axios';
 
 const Dashboard = () => {
-  const { userAuth:{ firstName, access_token, profile_img, email}} = useContext(UserContext);
-//   const handlePurchase = async () => {
-//     try {
-//         const response = await axios.post(`${serverApp}/transactions/pay`,
-//             {email:email}, 
-//             {
-//             headers: {
-//                 'Authorization':`Bearer ${access_token}`
-//             }
-//         });
-//         console.log(response);
-//         setTransaction(response.data);
-//         window.location.href = `https://checkout.paystack.com/${response.data.access_code}`;
-//     } catch (error) {
-//         console.error('Error initializing transaction:', error);
-//     }
-// };
-// function payWithPaystack() {
-//     const handler = PaystackPop.setup({
-//       key: import.meta.env.VITE_PAYSTACK_PUBLICK_KEY, // Replace with your public key
-//       email: email,
-//       amount:100000, // the amount value is multiplied by 100 to convert to the lowest currency unit
-//       currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
-//       callback: function(response) {
-//         //this happens after the payment is completed successfully
-//         const reference = response.reference;
-//         setReference(reference)
+  const [balance, setBalance ] = useState();
+  const [amount, setAmount] = useState();
+  const [showAmount, setShowAmount] = useState(false)
+  
+  const { userAuth:{ firstName, access_token, profile_img, email, wallet}} = useContext(UserContext);
+  const handlePurchase = async () => {
+    try {
+        const response = await axios.post(`${serverApp}/transactions/pay`,
+            {email, amount}, 
+            {
+            headers: {
+                'Authorization':`Bearer ${access_token}`
+            }
+        });
+        console.log(response);
+        setTransaction(response.data);
+        window.location.href = `https://checkout.paystack.com/${response.data.access_code}`;
+    } catch (error) {
+        console.error('Error initializing transaction:', error);
+    }
+};
 
+async function fundWallet () {
+    try {
+        const response = await axios.post(`${server}/fund-wallet`, {amount:amount}, {
+          headers: {
+            'Authorization':`Bearer ${access_token}`
+          }
+        })
+        console.log(response)
+        await getProfile()
 
-//       },
-//       onClose: function() {
-//         alert('Transaction was not completed, window closed.');
-//       },
-//     });
-//     handler.openIframe();
-//   }
+    } catch (error) {
+      console.error('Error fund wallet:', error);
+    }
+}
+
+console.log(wallet)
+async function getProfile (){
+  try {
+    const response = await axios.get(`${server}/profile`, {
+      headers: {
+        'Authorization':`Bearer ${access_token}`
+      }
+    })
+    console.log(response)
+    setBalance(response.data.user.wallet )
+  } catch (error) {
+    console.error('Error fetching balance:', error);
+  }
+}
+
+getProfile()
+
+function payWithPaystack() {
+    const handler = PaystackPop.setup({
+      key: 'pk_test_6b10c305ac9c9ff3601b7be8b88bd0addd1d2e68', // Replace with your public key
+      email: email,
+      amount:amount * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
+      currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
+      callback: function(response) {
+       fundWallet ()
+        setShowAmount(false)
+      },
+      onClose: function() {
+        alert('Transaction was not completed, window closed.');
+      },
+    });
+    handler.openIframe();
+  }
 
   if(!access_token) {
     return <Loader />
   }
+
+
   return (
     <div className='w-full flex flex-col gap-[1em]'>
+      {showAmount && 
+      <div
+      // onClick={() => setShowAmount(false)}
+      className='absolute top-0 bottom-0  bg-black/70 left-0 right-0 flex justify-center p-[2em] items-center h-screen w-full'>
+        <div className='max-w-xl w-[25em] gap-[2em] h-[30em]  flex-col bg-white rounded-3xl mt-[3em] flex p-[2em]'>
+          <div className='flex justify-between items-center'>
+          <div className='flex flex-col'>
+          <h2 className='text-3xl font-semibold text-primary'>Fund Wallet</h2>
+          <h2 className='text-red-400 text-sm  '>No real more is charged </h2>
+          </div>
+          <Button 
+          className=' bg-black px-2 w-fit hover:bg-red-600'
+          onClick={() => setShowAmount(false)}
+            title='Cancel'
+          />
+          </div>
+          <FormInput
+          value={amount} 
+          onChange={(e) => setAmount( e.target.value)}
+          label='Enter Amount'
+          name='amount' 
+          />
+          <Button 
+          className='w-full'
+          onClick={payWithPaystack}
+            title='Proceed to Payment'
+          />
+        </div>   
+      </div>}
         <DashboardHeader
          email={email}
           profile_img= {profile_img}
@@ -60,7 +128,7 @@ const Dashboard = () => {
             </svg>
           </button>
           <Button
-           onClick={() => {}}
+           onClick={() => setShowAmount(true)}
            title={
             <span className='flex items-center gap-2'>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -83,7 +151,7 @@ const Dashboard = () => {
             <path d="M10 7H16C18.8284 7 20.2426 7 21.1213 7.87868C22 8.75736 22 10.1716 22 13V15C22 17.8284 22 19.2426 21.1213 20.1213C20.2426 21 18.8284 21 16 21H10C6.22876 21 4.34315 21 3.17157 19.8284C2 18.6569 2 16.7712 2 13V11C2 7.22876 2 5.34315 3.17157 4.17157C4.34315 3 6.22876 3 10 3H14C14.93 3 15.395 3 15.7765 3.10222C16.8117 3.37962 17.6204 4.18827 17.8978 5.22354C18 5.60504 18 6.07003 18 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
             }
-          amount='0.00' 
+          amount={balance ? balance: '0.00'} 
           title='Wallet' />
           <WalletCard 
           bgColor='bg-[#222222]'

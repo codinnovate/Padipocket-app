@@ -17,8 +17,10 @@ const Demo = () => {
             <select className=' border border-primary font-semibold outline-none  p-1'>
                 {countries.map((item, idx) => {
                     return (
-                    <option key={idx}>
-                        <span className='text-primary font-bold'>{item.title}</span>
+                    <option
+                    className='text-primary font-bold'
+                     key={idx}>
+                     {item.title}
                     </option>
                     )
                     
