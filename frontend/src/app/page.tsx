@@ -23,7 +23,7 @@ export default function Home() {
     console.log(response);
     if(response.status === 200) {
       setLoading(false)
-      toast.success("sorry for the waiting, server needs 40secs to respond  after inactivity...");
+      toast.success("sorry for the delay, server needs 40secs to respond  after inactivity...");
     }
   }
 

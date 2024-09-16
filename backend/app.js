@@ -20,7 +20,7 @@ app.use(express.json());
 app.use("", [userRouter, escrowRouter]);
 app.use("/transactions", paymentRouter)
 app.get('/get-upload-url', uploadUrl);
-
+app.get('/active', (req, res) => res.status(200).json("server running"));
 app.get("/users/", verifyJWT, (req, res) => {
 try {
       const loggedInUserId = req.user;
