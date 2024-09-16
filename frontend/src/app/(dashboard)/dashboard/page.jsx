@@ -2,7 +2,7 @@
 import DashboardHeader from '@/components/DashboardHeader'
 import Button from '@/components/ui/button'
 import WalletCard from '@/components/ui/WalletCard';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { UserContext } from '@/context';
 import Loader from '@/components/Loader';
 import FormInput from '@/components/ui/FormInput';
@@ -15,22 +15,7 @@ const Dashboard = () => {
   const [showAmount, setShowAmount] = useState(false)
   
   const { userAuth:{ firstName, access_token, profile_img, email, wallet}} = useContext(UserContext);
-  const handlePurchase = async () => {
-    try {
-        const response = await axios.post(`${serverApp}/transactions/pay`,
-            {email, amount}, 
-            {
-            headers: {
-                'Authorization':`Bearer ${access_token}`
-            }
-        });
-        console.log(response);
-        setTransaction(response.data);
-        window.location.href = `https://checkout.paystack.com/${response.data.access_code}`;
-    } catch (error) {
-        console.error('Error initializing transaction:', error);
-    }
-};
+ 
 
 async function fundWallet () {
     try {
@@ -70,7 +55,7 @@ function payWithPaystack() {
       email: email,
       amount:amount * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
       currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
-      callback: function(response) {
+      callback: function() {
        fundWallet ()
         setShowAmount(false)
       },

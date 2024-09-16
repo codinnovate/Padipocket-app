@@ -1,7 +1,6 @@
 import User from "../schema/User.js";
 import bcrypt from 'bcrypt';
 import 'dotenv/config'
-import { getAuth } from 'firebase-admin/auth';
 import { formatDatatoSend } from "../utils/generates.js";
 import { generateUsername } from "../utils/generates.js";
 

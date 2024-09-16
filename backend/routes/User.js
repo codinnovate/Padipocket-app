@@ -8,7 +8,7 @@ export const userRouter = Router();
 
 userRouter.post("/signup", Register)
            .post("/fund-wallet",verifyJWT, fundWallet)
-          .post("/sigprofilenin", Login)
+          .post("/signin", Login)
           .get('/profile',   verifyJWT, getMyProfile)
           .delete('/user/delete/:id', verifyJWT, deleteUser)
           .put('/user/activate/:id', activateUser)

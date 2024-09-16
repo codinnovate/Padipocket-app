@@ -28,7 +28,7 @@ export default function Home() {
   }
 
 
-  useEffect(() => {
+useEffect(() => {
  load()
   }, [])
   if (loading) return <Loader />
