@@ -1,7 +1,6 @@
 import Footer from '@/components/Footer'
 import Header from '@/components/Marketplace/Header'
 import React from 'react'
-import InspireProducts from '@/components/Marketplace/InspireProducts';
 
 
 const Marketplace = () => {

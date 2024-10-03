@@ -10,7 +10,6 @@ import FormInput from '@/components/ui/FormInput';
 
 const Profile = () => {
   const { userAuth: { access_token } } = useContext(UserContext);
-  const router = useRouter();
 
   const [addressData, setAddressData] = useState({
     street: '',

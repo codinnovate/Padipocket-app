@@ -11,38 +11,53 @@ export const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // re
 export const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
 
 const Register = async (req, res) => {
-    let { firstName,lastName,  email, password } = req.body;
-    if (firstName.length < 3){
-        return res.status(403).json({"error":"First Name must be at least 3 letters "})
-    }
-    if (lastName.length < 3){
-        return res.status(403).json({"error":"Last Name must be at least 3 letters "})
-    }
-    if (!emailRegex.test(email)) {
+    try {
+      const { firstName, lastName, email, password } = req.body;
+  
+      // Validation checks
+      if (firstName.length < 3) {
+        return res.status(403).json({ error: "First Name must be at least 3 letters" });
+      }
+  
+      if (lastName.length < 3) {
+        return res.status(403).json({ error: "Last Name must be at least 3 letters" });
+      }
+  
+      if (!emailRegex.test(email)) {
+        return res.status(403).json({ error: "Email is invalid!!" });
+      }
+  
+      if (!passwordRegex.test(password)) {
         return res.status(403).json({
-            "error":"Email is invalid!!"
-        })
+          error: "Password should be 6 to 20 characters long with numeric, 1 lowercase, and 1 uppercase letter",
+        });
+      }
+  
+      // Hashing the password
+      const hash_password = await bcrypt.hash(password, 10);
+  
+      // Generate a username
+      const username = await generateUsername(email);
+  
+      // Create and save the user
+      const user = new User({ firstName, lastName, email, password: hash_password, username });
+  
+      try {
+        const savedUser = await user.save();
+        return res.status(200).json(formatDatatoSend(savedUser));
+      } catch (err) {
+        if (err.code === 11000) { // MongoDB duplicate key error
+          return res.status(500).json({ error: "Email already exists" });
+        }
+        console.error(err);
+        return res.status(500).json({ error: err.message });
+      }
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Server error" });
     }
-    if (!passwordRegex.test(password)){
-        return res
-            .status(403)
-            .json({
-            "error":"Password should be 6 to 20 characters long with  numberic, 1 lowercase and 1 uppercase letters "})
-    }
-    bcrypt.hash(password, 10, async(err, hash_password) => {
-        let username = await generateUsername(email);
-        let user = new User({firstName, lastName, email, password:hash_password , username,  })
-        user.save().then((u) => {
-            return res.status(200).json(formatDatatoSend(u))
-        })
-        .catch(err => {
-                if (err.code == 11000) {
-                return res.status(500).json({"error":"Email already exists"})
-            }
-            console.error(err)
-            return res.status(500).json({"error":err.message})
-        })})
-}
+  };
+  
 const Login = (req, res) => {
     let { email, password,  } = req.body;
     User.findOne({ "email": email })
