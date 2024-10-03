@@ -80,26 +80,48 @@ export const createEscrow = async (req, res) => {
 };
 
 
-// Accept Escrow Terms
+
+
 export const acceptEscrow = async (req, res) => {
   try {
     const { escrowId } = req.params;
+    const buyerId = req.user; // Get the buyer's id from the request context
 
+    // Find the escrow and ensure it exists
     const escrow = await Escrow.findById(escrowId);
-
     if (!escrow) {
       return res.status(404).json({ message: 'Escrow not found' });
     }
 
-    escrow.status = 'processing';
-    escrow.escrowWalletBalance = escrow.amount; // Move amount to locked escrow wallet
-    await escrow.save();
+    // Find and update the buyer's wallet
+    const buyer = await User.findByIdAndUpdate(
+      buyerId,
+      {
+        $inc: { wallet: -escrow.amount, escrow_wallet: escrow.amount }, // Deduct from wallet, add to escrow wallet
+      },
+      { new: true } // Return the updated document
+    );
+    if (!buyer) {
+      return res.status(404).json({ message: 'Buyer not found' });
+    }
 
-    res.status(200).json({ escrow });
+    // Update escrow status and lock the funds in the escrow wallet
+    const updatedEscrow = await Escrow.findByIdAndUpdate(
+      escrowId,
+      {
+        status: 'processing',
+        escrowWalletBalance: escrow.amount, // Move amount to locked escrow wallet
+      },
+      { new: true } // Return the updated document
+    );
+
+    res.status(200).json({ message: 'Escrow accepted and funds locked', escrow: updatedEscrow });
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    console.error('Error accepting escrow:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
 
 // Complete Escrow (Time or Buyer Confirms Receipt)
 export const completeEscrow = async (req, res) => {
@@ -112,11 +134,9 @@ export const completeEscrow = async (req, res) => {
       return res.status(404).json({ message: 'Escrow not found' });
     }
 
-    if (escrow.status !== 'processing') {
-      return res.status(400).json({ message: 'Escrow is not in processing state' });
-    }
 
-    escrow.status = 'completed';
+
+    escrow.status = 'processing';
     escrow.escrowSellerBalance = escrow.amount; // Transfer to seller
     escrow.escrowWalletBalance = 0; // Clear locked balance
     await escrow.save();

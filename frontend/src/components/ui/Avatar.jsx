@@ -9,6 +9,8 @@ const Avatar = ({profile_img}) => {
      src={profile_img ? profile_img : pic}
      className='object-cover rounded-full w-10 h-10 p-1 border-2 border-primary' 
      alt='avatar'
+     width='40'
+     height='40'
       />
   )
 }

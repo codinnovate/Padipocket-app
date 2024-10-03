@@ -6,6 +6,6 @@ export const  escrowRouter = express.Router();
 // Create a new Escrow
 escrowRouter.post('/escrow', verifyJWT, createEscrow)
             .post('/escrows/', verifyJWT, getEscrows)
-            .post('/escrow/:escrowId/accept', verifyJWT, acceptEscrow)
+            .put('/escrow/:escrowId/accept', verifyJWT, acceptEscrow)
             .post('/escrow/:escrowId/complete', verifyJWT, completeEscrow)
 

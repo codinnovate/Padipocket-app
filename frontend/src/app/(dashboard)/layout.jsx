@@ -1,14 +1,18 @@
-'use client';
-
+'use client'
+// import type { Metadata } from "next";
 
 import Logo from '@/components/Logo'
 import Link from 'next/link'
-import React, { useEffect, useState,  } from 'react'
-import { lookInSession } from '../lib/session';
+import {  removeFromSession } from "../lib/session";
+import { useContext } from 'react';
 import { UserContext } from '@/context';
+import { useRouter } from 'next/navigation';
 
 
-
+// export const metadata: Metadata = {
+//   title: "TradeStack",
+//   description: "TradeStack: Safe, Smart, Secure Transactions for E-Commerce and Beyond",
+// };
 const navItems = [
   {title:'Home' , href:'/dashboard', icon:<svg className="mb-1 md:my-4 md:mr-2 text-lg w-6 h-6 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M10 18L14 18" stroke="#a1aebf" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -23,7 +27,7 @@ const navItems = [
     </svg>
     },
   {
-    title:'Transactions' , 
+    title:'Transactions', 
     href:'/transactions', 
     icon:<svg className="mb-1 md:my-4 md:mr-2 text-lg w-6 h-6 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M2 10C2 6.68286 4.68286 4 8 4L7.14286 5.71429" stroke="#a1aebf" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -43,14 +47,15 @@ const navItems = [
     },
 ]
 
+const DashboardLayout = ({children}) => {
+  const {setUserAuth} = useContext(UserContext);
+  const router = useRouter();
 
-
-const DashboardLayout = ({children}:{children:React.ReactNode}) => {
-  const [userAuth, setUserAuth] = useState({});
-  useEffect(() => {
-    const  userInSession = lookInSession("user");
-    userInSession ?  setUserAuth(JSON.parse(userInSession)) : setUserAuth({access_token:null})
-},[])
+  const signOutUser = () => {
+    removeFromSession("user")
+    setUserAuth({access_token: null })
+    router.push('/auth/login')
+  }
   return (
     <div className='flex relative h-screen '>
       <aside 
@@ -77,7 +82,9 @@ const DashboardLayout = ({children}:{children:React.ReactNode}) => {
 
           ))}
         </ul>
-        <Link href='/logout' className="md:inline-flex md:mt-4 items-center mb-4 hidden">
+        <button 
+        onClick={signOutUser}
+        className="md:inline-flex md:mt-4 items-center mb-4 hidden">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M7.02331 5.5C4.59826 7.11238 3 9.86954 3 13C3 17.9706 7.02944 22 12 22C16.9706 22 21 17.9706 21 13C21 9.86954 19.4017 7.11238 16.9767 5.5" stroke="#a1aebf" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M12 2V10" stroke="#a1aebf" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -85,16 +92,14 @@ const DashboardLayout = ({children}:{children:React.ReactNode}) => {
         <span className="text-white pl-6 pr-10 py-2 rounded-t rounded-br font-display">
           Logout
         </span>
-        </Link>
+        </button>
 
 
       </aside>
 
       <main className="max-w-4xl mx-auto  w-full flex flex-col flex-1 p-3  overflow-auto md:ml-64 lg:ml-12  md:z-10 mb-16 md:mb-0 pt-6 md:pl-4 md:mt-[2em]">
       <h1 className='text-red-500 font-semibold text-[12px] ring-1 bg-red-50 ring-red-600 px-1 py-1.5 rounded-xl ml-auto'>Test Mode, No real amount is charged for transactions</h1>
-      <UserContext.Provider value={{ userAuth, setUserAuth }}>
       {children}
-      </UserContext.Provider>
       </main>
     </div>
   )

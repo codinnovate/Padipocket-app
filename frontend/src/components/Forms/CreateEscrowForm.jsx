@@ -19,7 +19,7 @@ const CreateEscrowForm = () => {
   const router = useRouter()
 
   function getTotalPrice(price) {
-    const fee = price * 1.1
+    const fee = price * 1.03
     return fee.toFixed(2);
   }
 

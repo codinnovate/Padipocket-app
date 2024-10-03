@@ -41,7 +41,6 @@ useEffect(() => {
      <Demo />
      <HowitWorks />
      <Features />
-   
     </div>
      <Footer />
     </div >

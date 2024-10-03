@@ -36,9 +36,9 @@ const Register = async (req, res) => {
             return res.status(200).json(formatDatatoSend(u))
         })
         .catch(err => {
-            //     if (err.code == 11000) {
-            //     return res.status(500).json({"error":"Email already exists"})
-            // }
+                if (err.code == 11000) {
+                return res.status(500).json({"error":"Email already exists"})
+            }
             console.error(err)
             return res.status(500).json({"error":err.message})
         })})
@@ -78,7 +78,7 @@ const getMyProfile = async (req, res) => {
     try {
       const userId = req.user;
       const user = await User.findById(userId)
-      .select("lastName firstName username wallet profile_img  -_id")
+      .select("lastName firstName email address username wallet profile_img  -_id")
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
@@ -88,21 +88,55 @@ const getMyProfile = async (req, res) => {
     }
   };
   
-
-// async function updateUsers() {
-//     try {
-//       const users = await User.find({ role: { $exists: false } }); // Find users without the role field
-//       for (let user of users) {
-//         user.role = 'user'; // Set default role for existing users
-//         await user.save(); // Save updated user document
-//       }
+  const updateProfile = async (req, res) => {
+    try {
+      // Ensure that req.user contains a valid user ID
+      const userId = req.user; // Assuming req.user contains the authenticated user's ID
   
-//       console.log('Users updated successfully.');
-//     } catch (error) {
-//       console.error('Error updating users:', error);
-//     } finally {
-//     }
-//   }
+      console.log('User ID:', userId); // Debugging check to see if userId is correct
+  
+      // Destructure incoming fields from the request body
+      const { firstName, lastName, email, username, address, profile_img } = req.body;
+  
+      // Prepare the fields that need to be updated (without optional chaining)
+      const updatedFields = {
+        firstName,
+        lastName,
+        email,
+        username,
+        profile_img,
+      };
+  
+      // Update address fields only if they exist in the request body
+      if (address) {
+        updatedFields.address = {
+          street: address.street || '',
+          city: address.city || '',
+          state: address.state || '',
+          postalCode: address.postalCode || '',
+          country: address.country || '',
+        };
+      }
+  
+      // Use findByIdAndUpdate with $set for safe updates and return the updated user
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $set: updatedFields },
+        { new: true, runValidators: true }
+      );
+  
+      // If user is not found, return a 404
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Successfully updated the profile
+      res.status(200).json({ message: 'Profile updated successfully', user: updatedUser });
+    } catch (error) {
+      console.error('Error updating profile:', error); // Log the error for debugging
+      res.status(500).json({ message: 'Server error', error });
+    }
+  };
   
 
 
@@ -153,32 +187,6 @@ const activateUser = async (req, res) => {
 };
 
 
-// const getAllContacts = async (req, res) => {
-//     try {
-//         // Fetch only the lastName firstName and phone number of users excluding roles "admin" and "superadmin"
-//         const users = await User.find({
-//             role: "user"
-//         }
-//         )
-//         .select("phoneNumber lastName firstName -_id"); // Exclude the _id field from the result
-
-//         // Extract lastName firstName and phone numbers into an array of formatted strings
-//         const contacts = users.map(user => `${user.phoneNumber}`);
-
-//         // Join the contacts with a newline character
-//         // const contactsString = contacts.join(',\n');
-
-//         // Send response as JSON with newline-separated contacts
-//         contacts.forEach(contact => console.log(contact));
-//         console.log(contacts.length);
-//     } catch (error) {
-//         console.error("Error fetching contacts:", error);
-//         // return res.status(500).json("An error occurred");
-//     }
-// }
-
-// getAllContacts()
-
 
 
 const getProfile = async (req, res) =>{
@@ -210,5 +218,11 @@ export const searchUsers = async (req, res) =>{
   
 }
 export {
-    Register,Login, getMyProfile,deleteUser,activateUser, getProfile
+    Register,
+    Login,
+    getMyProfile,
+    deleteUser, 
+    updateProfile,
+    activateUser,
+    getProfile
 }

@@ -2,15 +2,15 @@
 
 import React, { useState } from 'react'
 
-const FormInput = ({label, name, onChange, value, type = 'text'}) => {
+const FormInput = ({label, name, onChange, value, placeholder, type = 'text'}) => {
    const [show, setShow] = useState(false);
 
   return (
-    <div className='w-full relative flex flex-col gap-1 '>
-        <label htmlFor={name} className='text-sm capitalize font-semibold text-gray'>{label}</label>
+    <div className='w-full relative flex flex-col  mt-1'>
+        <label htmlFor={name} className='text-sm capitalize font-medium text-gray'>{label}</label>
         <input
         
-        placeholder={`Enter your ${label}`}
+        placeholder={placeholder ? placeholder: `Enter your ${label}`}
         type={name === 'password' && !show ? 'password' : type}
         onChange={onChange}
         value={value}
