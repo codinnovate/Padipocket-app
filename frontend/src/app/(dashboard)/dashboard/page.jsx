@@ -79,7 +79,7 @@ useEffect(() => {
   } else {
     getProfile();
   }
-}, [access_token]);
+}, [access_token, getProfile]);
   return (
     <div className='w-full flex flex-col gap-[1em]'>
       {showAmount && 

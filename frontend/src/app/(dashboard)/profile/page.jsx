@@ -2,7 +2,6 @@
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { server } from '../../../../server';
-import { useRouter } from 'next/navigation';
 import Loader from '@/components/Loader';
 import { UserContext } from '@/context';
 import Button from '@/components/ui/button';
@@ -58,7 +57,7 @@ const Profile = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.put(
+      await axios.put(
         `${server}/profile`, // Ensure your backend route is designed to accept only address updates
         { address: addressData },
         {
