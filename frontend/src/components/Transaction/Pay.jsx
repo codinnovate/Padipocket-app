@@ -1,5 +1,4 @@
 import React from 'react'
-import FormInput from '../ui/FormInput'
 import Logo from '../Logo';
 
 const Pay = ({amount}) => {

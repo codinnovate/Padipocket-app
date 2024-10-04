@@ -2,7 +2,7 @@ import React from 'react';
 import imageUrl from '@/assets/productset.png';
 import Image from 'next/image';
 
-const ProductCard = ({ bgColor, title, description, link, banner}) => {
+const ProductCard = ({ bgColor, title, description,  banner}) => {
   return (
     <div className={`relative overflow-hidden  flex w-full md:w-[540px] h-[300px] rounded-lg shadow-lg ${bgColor}`}>
       <Image

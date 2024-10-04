@@ -5,7 +5,7 @@ function ProductSet() {
     <div className='flex flex-col'>
         <div className='pr-[3em]'>
       <h1 className='font-semibold text-xl '>Product Sets</h1>
-      <h1 className='font-medium'>Don't waste time while you shop, Just Pick and Get all you need in one card!</h1>
+      <h1 className='font-medium'>Don&apos;t waste time while you shop, Just Pick and Get all you need in one card!</h1>
         </div>
     <div className="mt-5 flex flex-col md:grid gap-4 md:grid-cols-2 ">
       <ProductCard 
