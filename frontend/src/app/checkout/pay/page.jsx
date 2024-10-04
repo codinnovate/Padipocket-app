@@ -6,7 +6,7 @@ import Button from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 
 
-const Pay = ({amount}) => {
+const Pay = () => {
 const router = useRouter();
   return (
     <div className='flex flex-col gap-4 w-full justify-center items-center'>

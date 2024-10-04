@@ -8,8 +8,7 @@ import paidIcon from '@/assets/paid.png'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-const Success = ({amount}) => {
-  const router = useRouter();
+const Success = () => {
   return (
     <div className='flex flex-col gap-4 w-full justify-center items-center'>
       <div className='flex flex-col justify-center gap-5 items-center px-[3em]'>

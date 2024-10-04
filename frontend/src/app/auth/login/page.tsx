@@ -1,9 +1,9 @@
-import LoginForm from '@/components/Forms/LoginForm'
+import {LoginForm} from '@/components/Forms/LoginForm'
 import React from 'react'
 import Link from 'next/link';
 
 
-const Login = () => {
+export const Login = () => {
   return (
     <div className='flex flex-col'>
         <div className='flex flex-col gap-1'>
@@ -20,4 +20,3 @@ const Login = () => {
   )
 }
 
-export default Login

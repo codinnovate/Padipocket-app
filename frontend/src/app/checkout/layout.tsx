@@ -1,6 +1,6 @@
 import SecuredByFooter from '@/components/SecuredByFooter';
 
-export default function RootLayout({
+export default function CheckoutLayout({
     children,
   }: Readonly<{
     children: React.ReactNode;

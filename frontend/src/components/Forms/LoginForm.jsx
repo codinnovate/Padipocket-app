@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { UserContext } from '@/context'
 
-const LoginForm = () => {
+export function LoginForm (){
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const router = useRouter()
@@ -55,4 +55,3 @@ const LoginForm = () => {
   )
 }
 
-export default LoginForm
