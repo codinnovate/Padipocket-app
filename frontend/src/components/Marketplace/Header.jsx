@@ -11,7 +11,7 @@ import { UserContext } from '@/context';
 const Header = () => {
   const { userAuth:{ firstName, profile_img, wallet}} = useContext(UserContext);
   return (
-    <div className='w-full  sticky  top-0 bg-white '>
+    <div className='w-full  sticky z-50  top-0 bg-white '>
       <div className='flex py-2 px-3 md:px-0 max-w-6xl mx-auto w-full items-center  gap-5 justify-between'>
         <Logo
         subtitle='Marketplace'

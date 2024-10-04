@@ -12,7 +12,14 @@ import wardrobe from '@/assets/wardrobe.png';
 import accessories from '@/assets/watches.png';
 import ECard from '@/components/ui/ECard';
 import Products from '@/components/Product';
+import InspireProducts from '@/components/Marketplace/InspireProducts';
+import ProductSet from '@/components/ProductSet';
 
+const categories = [
+  {name: 'Electronics', icon: electronics},
+  {name: 'Fashion', icon: fashion},
+  {name: 'Drinks and Foods', icon: drinks},
+]
 const tabsItems = [
   {title:'Electronics', icon:electronics},
   {title:'Fashion', icon:fashion},
@@ -46,6 +53,8 @@ const Marketplace = () => {
                 />
               ))}
             </div>
+            <InspireProducts />
+            <ProductSet />
             <Products />
 
 

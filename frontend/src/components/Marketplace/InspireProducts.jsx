@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function InspireProducts() {
   const [userQuery, setUserQuery] = useState('');
@@ -12,47 +14,56 @@ export default function InspireProducts() {
 
   const fetchRecommendations = async () => {
     try {
-      const [listings, setListings] = useState('');
+      // Replace with your OpenAI API key and endpoint
+      const openaiApiKey = 'YOUR_OPENAI_API_KEY';
+      const openaiEndpoint = 'https://api.openai.com/v1/chat/completions';
 
-    useEffect(() => {
-        const getListings = async () => {
-            try {
-                const response = await axios.get('https://dummyjson.com/products/')
-                setListings(response?.data.products);
-                console.log(response?.data.products);
-            } catch (error) {
-                toast.error(error);
-            }
+      const prompt = `Recommend products for a ${userQuery}. The products should be in the price range of $13 to $15.`;
+
+      const response = await axios.post(
+        openaiEndpoint,
+        {
+          model: 'gpt-3.5-turbo', // or any other model you're using
+          messages: [{ role: 'user', content: prompt }],
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${openaiApiKey}`,
+            'Content-Type': 'application/json',
+          },
         }
-      getListings()
-    }, [])
-      setRecommendations(data);
+      );
+
+      const recommendationText = response.data.choices[0].message.content;
+      setRecommendations(recommendationText.split('\n').filter(Boolean)); // Assuming each recommendation is on a new line
     } catch (error) {
       console.error('Error fetching recommendations:', error);
+      toast.error('Error fetching recommendations');
     }
   };
 
   return (
-    <div>
-      <h1>Inspire Products</h1>
-      <input
+    <div className='flex w-full flex-col'>
+      <h1 className='text-xl font-semibold'>Use PadiAi to Shop</h1>
+      <h1 className='font-medium'>PadiAI can help you get all you want </h1>
+      <div className='w-full flex justify-between mt-5'>
+      <textarea
         type="text"
-        placeholder="What can I get for my 6-year-old?"
+        placeholder="What can I get for a 13-year-old boy?"
         value={userQuery}
+        className='w-[80%] p-2 border-b placeholder:text-gray bg-gray-500 outline-none'
         onChange={handleQueryChange}
       />
-      <button onClick={fetchRecommendations}>Ask</button>
-
-      <div>
-        <h2>Recommendations</h2>
+      <button className='bg-black text-white rounded-2xl font-semibold py-2 px-4 w-[18%]' onClick={fetchRecommendations}>Ask</button>
+      </div>
+      {/* <h2 className='text-xl font-semibold mt-4'>Your Recommendations</h2> */}
+      <div className='flex flex-col '>
         {recommendations.length === 0 ? (
           <p>No products found</p>
         ) : (
-          recommendations.map((product) => (
-            <div key={product._id}>
-              <h3>{product.name}</h3>
-              <p>{product.description}</p>
-              <p>Price: ${product.price}</p>
+          recommendations.map((product, index) => (
+            <div key={index}>
+              <p>{product}</p>
             </div>
           ))
         )}
