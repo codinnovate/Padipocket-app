@@ -2,15 +2,15 @@
 import DashboardHeader from '@/components/DashboardHeader'
 import Button from '@/components/ui/button'
 import WalletCard from '@/components/ui/WalletCard';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '@/context';
-import Loader from '@/components/Loader';
 import FormInput from '@/components/ui/FormInput';
 import { server } from '../../../../server';
 import axios from 'axios';
 
 const Dashboard = () => {
   const [balance, setBalance ] = useState();
+  const [escrow_balance, setEscrowBalance] = useState();
   const [amount, setAmount] = useState();
   const [showAmount, setShowAmount] = useState(false)
   const { userAuth:{ firstName, access_token, profile_img, email, wallet}} = useContext(UserContext);
@@ -41,12 +41,12 @@ async function getProfile (){
     })
     console.log(response)
     setBalance(response.data.user.wallet )
+    setEscrowBalance(response.data.user.escrow_wallet )
   } catch (error) {
     console.error('Error fetching balance:', error);
   }
 }
 
-getProfile()
 
 function payWithPaystack() {
     const handler = PaystackPop.setup({
@@ -65,11 +65,21 @@ function payWithPaystack() {
     handler.openIframe();
   }
 
-  if(!access_token) {
-    return <Loader />
+//  first reload in 5secs if there is still no access_token resend to login
+ 
+useEffect(() => {
+  // Check for access_token and set a timeout to reload if not found
+  if (!access_token) {
+    const timeout = setTimeout(() => {
+      window.location.reload();
+    }, 5000);
+
+    // Clear the timeout if the component unmounts or access_token is available
+    return () => clearTimeout(timeout);
+  } else {
+    getProfile();
   }
-
-
+}, [access_token]);
   return (
     <div className='w-full flex flex-col gap-[1em]'>
       {showAmount && 
@@ -144,7 +154,7 @@ function payWithPaystack() {
             <path d="M11.9982 2C8.99043 2 7.04018 4.01899 4.73371 4.7549C3.79589 5.05413 3.32697 5.20374 3.1372 5.41465C2.94743 5.62556 2.89186 5.93375 2.78072 6.55013C1.59143 13.146 4.1909 19.244 10.3903 21.6175C11.0564 21.8725 11.3894 22 12.0015 22C12.6135 22 12.9466 21.8725 13.6126 21.6175C19.8116 19.2439 22.4086 13.146 21.219 6.55013C21.1078 5.93364 21.0522 5.6254 20.8624 5.41449C20.6726 5.20358 20.2037 5.05405 19.2659 4.75499C16.9585 4.01915 15.0061 2 11.9982 2Z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             }
-          amount='0.00' 
+          amount={escrow_balance ? escrow_balance: '0.00'}
           title='Escrow Secured ' />
         </div>
 

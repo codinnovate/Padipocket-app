@@ -3,7 +3,6 @@ import User from '../schema/User.js';
 
 import nodemailer from 'nodemailer';
 
-
 export const createEscrow = async (req, res) => {
   try {
     const { secondParty, role, description, needsDispatch, amount } = req.body;
@@ -52,9 +51,9 @@ export const createEscrow = async (req, res) => {
               <main>
               <h2 class="mt-6 text-gray-700 dark:text-gray-200">Hi,</h2>
               <p class="mt-2 leading-loose text-gray-600 dark:text-gray-300">
-                  <h1>You have been invited to join ${creatorFirstName} ${creatorLastName} PadiPocket to accept a secure transaction agreement</h1>
+                  <h1>You have been invited  to accept a secure transaction agreement on Padipocket</h1>
                   <p>Here is the description of the transaction agreement : ${desc}</p>
-                  <h2>Here is the link https://padipocket.vercel.app/escrow/processing/${escrow_id}</h2>
+                  <h2>Here is the link to get started on your account https://padipocket.vercel.app/auth/register/</h2>
               </p>
               <p class="mt-2 text-gray-600 dark:text-gray-300">
                   Thanks, <br>
@@ -81,43 +80,62 @@ export const createEscrow = async (req, res) => {
 
 
 
-
 export const acceptEscrow = async (req, res) => {
   try {
     const { escrowId } = req.params;
     const buyerId = req.user; // Get the buyer's id from the request context
 
-    // Find the escrow and ensure it exists
     const escrow = await Escrow.findById(escrowId);
     if (!escrow) {
       return res.status(404).json({ message: 'Escrow not found' });
     }
 
-    // Find and update the buyer's wallet
-    const buyer = await User.findByIdAndUpdate(
-      buyerId,
-      {
-        $inc: { wallet: -escrow.amount, escrow_wallet: escrow.amount }, // Deduct from wallet, add to escrow wallet
-      },
-      { new: true } // Return the updated document
-    );
-    if (!buyer) {
-      return res.status(404).json({ message: 'Buyer not found' });
-    }
-
-    // Update escrow status and lock the funds in the escrow wallet
+    // Update escrow status to processing
     const updatedEscrow = await Escrow.findByIdAndUpdate(
       escrowId,
       {
-        status: 'processing',
-        escrowWalletBalance: escrow.amount, // Move amount to locked escrow wallet
+        status: 'processing', // Change status to processing
       },
       { new: true } // Return the updated document
     );
 
-    res.status(200).json({ message: 'Escrow accepted and funds locked', escrow: updatedEscrow });
+    // Optionally, add the amount to the buyer's escrow_wallet
+    await User.findByIdAndUpdate(
+      buyerId,
+      {
+        $inc: { escrow_wallet: escrow.amount }, // Add amount to buyer's escrow_wallet
+      },
+      { new: true } // Return the updated document
+    );
+
+    res.status(200).json({ message: 'Escrow accepted and status updated to processing', escrow: updatedEscrow });
   } catch (error) {
     console.error('Error accepting escrow:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+export const markAsDelivered = async (req, res) => {
+  try {
+    const { escrowId } = req.params;  // Get escrowId from request parameters
+
+    // Find the escrow transaction by its ID
+    const escrow = await Escrow.findById(escrowId);
+    if (!escrow) {
+      return res.status(404).json({ message: 'Escrow transaction not found' });
+    }
+    const updatedEscrow = await Escrow.findByIdAndUpdate(
+      escrowId,
+      {
+        status: 'delivered', // Change status to processing
+      },
+      { new: true } // Return the updated document
+    );
+
+
+    res.status(200).json({ message: 'Escrow status updated to delivered', updatedEscrow });
+  } catch (error) {
+    console.error('Error updating escrow status to delivered:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };

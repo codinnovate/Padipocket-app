@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Register, Login, getMyProfile, deleteUser,updateProfile, activateUser, getProfile } from "../controllers/User.js";
+import { Register, Login, getMyProfile, deleteUser,updateProfile, activateUser, getProfile, getUserIdByEmail } from "../controllers/User.js";
 import { verifyJWT } from "../middlewares/VerifyJwt.js";
 import { fundWallet } from "../controllers/Wallet.js";
 
@@ -13,4 +13,5 @@ userRouter.post("/signup", Register)
           .delete('/user/delete/:id', verifyJWT, deleteUser)
           .put('/user/activate/:id', activateUser)
           .post('/get-profile', getProfile)
-          .put('/profile', verifyJWT, updateProfile);
+          .put('/profile', verifyJWT, updateProfile)
+          .post('/getUserIdByEmail', getUserIdByEmail)

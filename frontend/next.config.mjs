@@ -13,6 +13,11 @@ const nextConfig = {
                 hostname: 'api.dicebear.com',
                 port: '',
             },
+            {
+                protocol: 'https',
+                hostname: 'cdn.dummyjson.com',
+                port: '',
+            }
         ],
     },
   };

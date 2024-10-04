@@ -1,40 +1,40 @@
 'use client'
-
-import React, { useContext, useState } from 'react'
-import FormInput from '../ui/FormInput'
-import Button from '../ui/button'
-import axios from 'axios'
-import { server } from '../../../server'
-import { useRouter } from 'next/navigation'
+import React, { useContext, useState } from 'react';
+import FormInput from '../ui/FormInput';
+import Button from '../ui/button';
+import axios from 'axios';
+import { server } from '../../../server';
+import { useRouter } from 'next/navigation';
 import { UserContext } from '@/context';
-import toast, { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from 'react-hot-toast';
 
 const CreateEscrowForm = () => {
   const { userAuth: { access_token } } = useContext(UserContext);
 
-  const [desc, setDesc] = useState('')
+  const [desc, setDesc] = useState('');
   const [price, setPrice] = useState('');
-  const [secondParty, setSecondParty] = useState('')
+  const [secondParty, setSecondParty] = useState('');
   const [dispatchRider, setDispatchRider] = useState(false); // To store true or false for dispatch rider
-  const router = useRouter()
+  const router = useRouter();
 
   function getTotalPrice(price) {
-    const fee = price * 1.03
+    const fee = price * 1.03; // Add a 3% fee
     return fee.toFixed(2);
   }
 
   async function handleEscrow(e) {
     e.preventDefault();
     try {
-      // Determine if the role is 'Buyer'
+      // Calculate the total price including the fee
+      const totalPrice = getTotalPrice(price);
 
       const response = await axios.post(
         `${server}/escrow`, 
         { 
           secondParty, 
           description: desc, 
-          needsDispatch:dispatchRider, 
-          amount: price 
+          needsDispatch: dispatchRider, 
+          amount: totalPrice // Use the calculated total price here
         },
         { 
           headers: { 
@@ -44,8 +44,8 @@ const CreateEscrowForm = () => {
       );
 
       console.log(response.data);
-      toast.success("Escrow Created Successfully, Awaiting second party agreement ")
-      router.push('/escrow/processing')
+      toast.success("Escrow Created Successfully, Awaiting second party agreement ");
+      router.push('/escrow/processing');
     } catch (error) {
       toast.error(error?.response?.data?.error);
       console.error(error);
@@ -53,13 +53,13 @@ const CreateEscrowForm = () => {
   }
 
   return (
-    <form className='flex flex-col gap-5 ' onSubmit={handleEscrow}>
+    <form className='flex flex-col gap-5' onSubmit={handleEscrow}>
       <Toaster />
       <h2 className='text-primary uppercase font-semibold mt-[20]'>
         Create an Escrow in Seconds
       </h2>
       <h2 className='text-[10px] -mb-5 capitalize font-semibold text-red-500'>
-        Please Note The Buyer will be charged transactions fee (You)
+        Please Note The Buyer will be charged transaction fee (You)
       </h2>
 
       <h2 className='text-sm -mb-4 capitalize font-semibold text-gray'>
@@ -97,7 +97,7 @@ const CreateEscrowForm = () => {
       <FormInput 
         name='Price' 
         value={price}
-        type='Number'
+        type='number'
         onChange={(e) => setPrice(e.target.value)}
         label='Price'
       />
@@ -111,7 +111,7 @@ const CreateEscrowForm = () => {
         title='Start Transaction'
       />
     </form>
-  )
+  );
 }
 
 export default CreateEscrowForm;

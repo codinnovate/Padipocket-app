@@ -7,7 +7,7 @@ const escrowSchema = new Schema({
   description: { type: String, required: true },
   needsDispatch: { type: Boolean, default: false }, // If courier dispatch is required
   amount: { type: Number, required: true }, // Escrow amount
-  status: { type: String, enum: ['created', 'processing', 'completed', 'cancelled'], default: 'created' },
+  status: { type: String, enum: ['created', 'processing', 'completed', 'delivered', 'cancelled'], default: 'created' },
   createdAt: { type: Date, default: Date.now },
 });
 

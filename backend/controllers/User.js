@@ -11,56 +11,60 @@ export const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // re
 export const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
 
 const Register = async (req, res) => {
-    try {
-      const { firstName, lastName, email, password } = req.body;
-  
-      // Validation checks
-      if (firstName.length < 3) {
-        return res.status(403).json({ error: "First Name must be at least 3 letters" });
-      }
-  
-      if (lastName.length < 3) {
-        return res.status(403).json({ error: "Last Name must be at least 3 letters" });
-      }
-  
-      if (!emailRegex.test(email)) {
-        return res.status(403).json({ error: "Email is invalid!!" });
-      }
-  
-      if (!passwordRegex.test(password)) {
-        return res.status(403).json({
-          error: "Password should be 6 to 20 characters long with numeric, 1 lowercase, and 1 uppercase letter",
-        });
-      }
-  
-      // Hashing the password
-      const hash_password = await bcrypt.hash(password, 10);
-  
-      // Generate a username
-      const username = await generateUsername(email);
-  
-      // Create and save the user
-      const user = new User({ firstName, lastName, email, password: hash_password, username });
-  
-      try {
-        const savedUser = await user.save();
-        return res.status(200).json(formatDatatoSend(savedUser));
-      } catch (err) {
-        if (err.code === 11000) { // MongoDB duplicate key error
-          return res.status(500).json({ error: "Email already exists" });
-        }
-        console.error(err);
-        return res.status(500).json({ error: err.message });
-      }
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Server error" });
+  try {
+    const { firstName, lastName, email, password } = req.body;
+
+    // Validation checks
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" }); // Check if email is provided
     }
-  };
+
+    if (firstName.length < 3) {
+      return res.status(403).json({ error: "First Name must be at least 3 letters" });
+    }
+
+    if (lastName.length < 3) {
+      return res.status(403).json({ error: "Last Name must be at least 3 letters" });
+    }
+
+    if (!emailRegex.test(email)) {
+      return res.status(403).json({ error: "Email is invalid!!" });
+    }
+
+    if (!passwordRegex.test(password)) {
+      return res.status(403).json({
+        error: "Password should be 6 to 20 characters long with numeric, 1 lowercase, and 1 uppercase letter",
+      });
+    }
+
+    // Check if the email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ error: "Email already exists" }); // 409 Conflict
+    }
+
+    // Hashing the password
+    const hash_password = await bcrypt.hash(password, 10);
+
+    // Generate a username
+    const username = await generateUsername(email);
+
+    // Create and save the user
+    const user = new User({ firstName, lastName, email, password: hash_password, username });
+
+    const savedUser = await user.save();
+    return res.status(200).json(formatDatatoSend(savedUser));
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
   
-const Login = (req, res) => {
+const Login = async (req, res) => {
     let { email, password,  } = req.body;
-    User.findOne({ "email": email })
+    await User.findOne({ "email": email })
         .then((user) => {
             if (!user){
                     return res.status(403).json({"error":"Email not found"})
@@ -93,7 +97,7 @@ const getMyProfile = async (req, res) => {
     try {
       const userId = req.user;
       const user = await User.findById(userId)
-      .select("lastName firstName email address username wallet profile_img  -_id")
+      .select("lastName firstName email address username wallet escrow_wallet profile_img  -_id")
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
@@ -231,10 +235,36 @@ export const searchUsers = async (req, res) =>{
             return res.status(500).json({ error: err.message })
         })
   
+
+
 }
+
+ const getUserIdByEmail = async (req, res) => {
+  try {
+    const { email } = req.body; // Get email from request body
+    const user = await User.findOne({ email }); // Find user by email
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      userId: user._id // Return user ID
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error retrieving user ID',
+      error: error.message
+    });
+  }
+};
+
 export {
     Register,
     Login,
+    getUserIdByEmail,
     getMyProfile,
     deleteUser, 
     updateProfile,

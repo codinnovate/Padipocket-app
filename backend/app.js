@@ -25,7 +25,7 @@ app.get("/users/", verifyJWT, (req, res) => {
 try {
       const loggedInUserId = req.user;
       User.find({ _id: { $ne: loggedInUserId } })
-      .select("-personal_info.password -google_auth -updatedAt -blogs")
+      .select("-password -google_auth -updatedAt -blogs")
       .then((users) => {
           res.status(200).json(users);
         })

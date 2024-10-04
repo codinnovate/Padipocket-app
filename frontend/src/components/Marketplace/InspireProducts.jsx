@@ -12,14 +12,20 @@ export default function InspireProducts() {
 
   const fetchRecommendations = async () => {
     try {
-      const response = await fetch('/api/askForProducts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userQuery }),
-      });
-      const data = await response.json();
+      const [listings, setListings] = useState('');
+
+    useEffect(() => {
+        const getListings = async () => {
+            try {
+                const response = await axios.get('https://dummyjson.com/products/')
+                setListings(response?.data.products);
+                console.log(response?.data.products);
+            } catch (error) {
+                toast.error(error);
+            }
+        }
+      getListings()
+    }, [])
       setRecommendations(data);
     } catch (error) {
       console.error('Error fetching recommendations:', error);

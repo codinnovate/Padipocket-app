@@ -53,6 +53,7 @@ const formatDatatoSend = (user) => {
         role:user.role,
         email:user.email,
         wallet: user.wallet,
+        escrow_wallet: user.escrow_wallet,
         userId:user._id
         }
     }

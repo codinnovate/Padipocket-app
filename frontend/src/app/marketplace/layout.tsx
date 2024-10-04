@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
 
 export const metadata: Metadata = {
   title: "Padipocket | MarketPlace",

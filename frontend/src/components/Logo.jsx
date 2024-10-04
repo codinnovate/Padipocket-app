@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
+
+
 const Logo = ({color, subtitle}) => {
   return (
     <Link href='/' className={`${color === 'light' ? "text-white":"text-black"} relative min-w-fit max-w-[100px]`}>
