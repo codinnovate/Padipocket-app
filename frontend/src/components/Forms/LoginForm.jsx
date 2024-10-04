@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState,useEffect } from 'react'
 import FormInput from '../ui/FormInput'
 import Button from '../ui/button'
 import axios from 'axios'
@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { UserContext } from '@/context'
 
-export function LoginForm (){
+export const LoginForm = () => {
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const router = useRouter()
@@ -30,11 +30,12 @@ export function LoginForm (){
       console.error(error)
     }
   }
-  if (access_token){
-    return router.push('/dashboard')
-  }
-  return (
 
+  useEffect(() => {
+    if (access_token) return router.push('/dashboard')
+  }, 
+  [access_token]);
+  return (
    <form className='flex flex-col gap-5'>
     <Toaster />
     <FormInput 
