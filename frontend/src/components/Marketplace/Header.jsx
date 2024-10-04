@@ -1,7 +1,6 @@
 'use client';
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import Logo from '../Logo'
-import {useRouter } from 'next/navigation'
 import Searchbar from '../ui/Searchbar';
 import Avatar from '../ui/Avatar'
 import { UserContext } from '@/context';
