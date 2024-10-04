@@ -6,7 +6,6 @@ import Button from '@/components/ui/button';
 import Image from 'next/image';
 import checked from '@/assets/check.png'
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 const Completed = () => {
   return (

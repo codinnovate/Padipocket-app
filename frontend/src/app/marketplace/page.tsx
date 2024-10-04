@@ -15,11 +15,7 @@ import Products from '@/components/Product';
 import InspireProducts from '@/components/Marketplace/InspireProducts';
 import ProductSet from '@/components/ProductSet';
 
-const categories = [
-  {name: 'Electronics', icon: electronics},
-  {name: 'Fashion', icon: fashion},
-  {name: 'Drinks and Foods', icon: drinks},
-]
+
 const tabsItems = [
   {title:'Electronics', icon:electronics},
   {title:'Fashion', icon:fashion},

@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react'
-import Logo from '@/components/Logo';
 import Button from '@/components/ui/button';
 import Image from 'next/image';
 import paidIcon from '@/assets/paid.png'
@@ -9,6 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const Success = () => {
+  const router = useRouter();
   return (
     <div className='flex flex-col gap-4 w-full justify-center items-center'>
       <div className='flex flex-col justify-center gap-5 items-center px-[3em]'>
