@@ -1,7 +1,8 @@
+
+
 import Image from 'next/image';
 import axios from 'axios';
-import Button from './ui/button';
-
+import Link from 'next/link';
 
 async function Products() {
     const response = await axios.get('https://dummyjson.com/products');
@@ -24,10 +25,10 @@ async function Products() {
                 <h2 className='font-bold text-xl'>{product.title}</h2>
                 <p className='text-gray uppercase font-normal'>{product.category}</p>
                 <p>Price: ₦{(product.price * 100).toFixed()}</p>
-                <Button 
-                className='bg-black capitaliz font-medium mt-4'
-                title='Pay with Padipocket' 
-                />
+                
+                <Link href='/checkout/pay' className='bg-primary mt-5 hover:bg-green p-5 rounded-3xl transition-all text-white'>
+                <h2 className='text-center text-xl font-medium '>Checkout with Padipocket</h2>
+                </Link>
                 </div>
             </div >
           ))
