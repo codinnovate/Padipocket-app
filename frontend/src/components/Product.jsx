@@ -10,12 +10,12 @@ async function Products() {
   return (
     <div>
       <h1 className='text-3xl font-bold mt-[3em] mb-[4em]'>Just For You</h1>
-      <div className='flex flex-col md:grid md:grid-cols-4 justify-between items-center gap-[4em] mt-5'>
+      <div className='flex flex-col md:grid md:grid-cols-3 justify-between items-center gap-[4em] mt-5'>
         {products && products.length > 0 ? (
           products.map((product) => (
             <div  
             key={product.id} 
-            className='flex justify-center flex-col bg-white shadow-lg  h-fit p-5 items-center rounded-2xl relative '>
+            className='flex justify-center flex-col bg-white shadow-lg  h-fit p-5 items-center rounded-2xl relative min-w-[300px] '>
                 <Image src={product.images?.[0]} 
                 alt={product.title}
                  width={200} height={100} 
@@ -27,7 +27,7 @@ async function Products() {
                 <p>Price: ₦{(product.price * 100).toFixed()}</p>
                 
                 <Link href='/checkout/pay' className='bg-primary mt-5 hover:bg-green p-5 rounded-3xl transition-all text-white'>
-                <h2 className='text-center text-xl font-medium '>Checkout with Padipocket</h2>
+                <h2 className='text-center  font-medium '>Checkout with Padipocket</h2>
                 </Link>
                 </div>
             </div >
