@@ -27,7 +27,7 @@ async function Products() {
                 <p>Price: ₦{(product.price * 100).toFixed()}</p>
                 
                 <Link href='/checkout/pay' className='bg-primary mt-5 hover:bg-green p-5 rounded-3xl transition-all text-white'>
-                <h2 className='text-center  font-medium '>Checkout with Padipocket</h2>
+                <h2 className='text-center  font-medium '>Checkout with TradeStack</h2>
                 </Link>
                 </div>
             </div >

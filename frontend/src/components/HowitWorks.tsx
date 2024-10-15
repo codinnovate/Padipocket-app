@@ -13,7 +13,7 @@ const HowitWorks = () => {
         <Heading 
          headText='How it works' 
          subheadText='Find the item you want to Buy or Sell in the market place or create an Escrow for a stranger. 
-         PadiPocket holds the payment in escrow, ensuring security for both parties' />
+         TradeStack holds the payment in escrow, ensuring security for both parties' />
         <div className='flex flex-col md:flex-row justify-between gap-[3em] md:gap-5'>
             <HowCard 
             bgColor='bg-[#9672FF]'
@@ -23,7 +23,7 @@ const HowitWorks = () => {
                 </svg>
                 }
             title='Choose Your Product'
-            subtext='Find the item you want to purchase or sell. PadiPocket holds the payment in escrow, ensuring security for both parties.'
+            subtext='Find the item you want to purchase or sell. TradeStack holds the payment in escrow, ensuring security for both parties.'
             />
             <Image src={line2} width='150' height='11' className='object-contain hidden md:flex' alt='line' />
             <HowCard 
@@ -35,7 +35,7 @@ const HowitWorks = () => {
                 </svg>
                 }
             title='Complete the Transaction'
-            subtext='Once the product is delivered, confirm its condition. PadiPocket only releases the payment when both parties are satisfied.'
+            subtext='Once the product is delivered, confirm its condition. TradeStack only releases the payment when both parties are satisfied.'
             />
             <Image src={line1} width='150' height='11' className='object-contain hidden md:flex' alt='line' />
 
@@ -50,7 +50,7 @@ const HowitWorks = () => {
                 <path d="M14.5 6H16.3212C17.7766 6 18.5042 6 19.0964 6.35371C19.6886 6.70742 20.0336 7.34811 20.7236 8.6295L22 11" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>}
             title='Receive What You Ordered'
-            subtext='If the item is as described, payment is completed. If there’s a problem, PadiPocket helps resolve disputes.'
+            subtext='If the item is as described, payment is completed. If there’s a problem, TradeStack helps resolve disputes.'
             />
 
 

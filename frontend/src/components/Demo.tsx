@@ -28,7 +28,7 @@ const Demo = () => {
             </select>
         </div>
         <div className='flex flex-col'>
-            <h2 className='text-4xl font-bold text-center text-primary'>Padipocket Escrow Demo</h2>
+            <h2 className='text-4xl font-bold text-center text-primary'>TradeStack Escrow Demo</h2>
             <h3 className='text-gray text-xl text-center mt-2'>For this Demo, we assumed you have an active account with a sum of 100,000 Naira in your account. You can use this to test the escrow service.</h3>
 
         </div>

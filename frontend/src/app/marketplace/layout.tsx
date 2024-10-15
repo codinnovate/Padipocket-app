@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Padipocket | MarketPlace",
-  description: "Padipocket: Safe, Smart, Secure Transactions for E-Commerce and Beyond",
+  title: "TradeStack | MarketPlace",
+  description: "TradeStack: Safe, Smart, Secure Transactions for E-Commerce and Beyond",
 };
 
 export default function RootLayout({

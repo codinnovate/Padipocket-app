@@ -8,8 +8,8 @@ const Hero = () => {
   return (
     <div className='flex w-full flex-col md:flex-row items-center md:justify-between  mt-[64px] gap-5'>
         <div className='flex  flex-col gap-4 md:w-3/5'>
-            <h2 className='text-3xl md:text-4xl font-bold text-primary'>Buy and Sell with Confidence – PadiPocket Ensures You Get What You Paid For</h2>
-            <h3 className='text-gray'>Say goodbye to the fear of being scammed. With PadiPocket, your money is safe until you confirm delivery. Transact with peace of mind, knowing that we’ve got your back..</h3>
+            <h2 className='text-3xl md:text-4xl font-bold text-primary'>Buy and Sell with Confidence – TradeStack Ensures You Get What You Paid For</h2>
+            <h3 className='text-gray'>Say goodbye to the fear of being scammed. With TradeStack, your money is safe until you confirm delivery. Transact with peace of mind, knowing that we’ve got your back..</h3>
             {/* <div className='flex gap-2'>
                 <Image
                  src={playstore}
